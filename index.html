@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b1a1f" />
+
+    <title>Dr Xora — AI-assisted X-ray & CT reporting</title>
+    <meta
+      name="description"
+      content="Dr Xora turns chest X-rays and CT scans into structured, doctor-ready findings — so clinicians spend less time typing and more time deciding."
+    />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <meta property="og:title" content="Dr Xora — AI-assisted X-ray & CT reporting" />
+    <meta
+      property="og:description"
+      content="Upload a chest X-ray or CT scan and get structured, doctor-ready findings in seconds."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script>
+      // Apply the stored theme before first paint. Without this the app always
+      // renders light for a frame and dark-mode users see a white flash.
+      (function () {
+        try {
+          var stored = localStorage.getItem("dr-xora-theme") || "system";
+          var dark =
+            stored === "dark" ||
+            (stored === "system" &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          document.documentElement.classList.add(dark ? "dark" : "light");
+          document.documentElement.style.colorScheme = dark ? "dark" : "light";
+        } catch (e) {
+          /* storage blocked — the React provider still applies the theme */
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <noscript>Dr Xora requires JavaScript to run.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

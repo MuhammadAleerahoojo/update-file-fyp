@@ -1,0 +1,296 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Design tokens
+   --------------------------------------------------------------------------
+   A clinical-imaging palette: cool film-grey surfaces, a deep radiology-viewer
+   teal as primary, and a warm amber reserved exclusively for AI signal — the
+   scan reticle, the analysis sweep, active-inference states. Reserving one hue
+   for "the machine is doing something" is what stops the interface reading as
+   a generic dashboard.
+
+   Surfaces are layered (`background` → `card` → `elevated`) so depth comes from
+   tone rather than heavy shadows, which is what makes dark mode hold up.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    --background: 190 20% 98%;
+    --foreground: 200 45% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 200 45% 10%;
+    --elevated: 190 24% 96%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 200 45% 10%;
+
+    --primary: 184 62% 25%;
+    --primary-foreground: 180 40% 98%;
+
+    --secondary: 27 88% 54%;
+    --secondary-foreground: 24 45% 12%;
+
+    --muted: 192 20% 94%;
+    --muted-foreground: 200 12% 42%;
+
+    --accent: 184 40% 93%;
+    --accent-foreground: 184 62% 20%;
+
+    --destructive: 4 74% 50%;
+    --destructive-foreground: 0 0% 99%;
+
+    --success: 158 64% 34%;
+    --success-foreground: 0 0% 99%;
+
+    --border: 192 16% 89%;
+    --input: 192 16% 87%;
+    --ring: 184 62% 32%;
+
+    --radius: 0.75rem;
+
+    /* The sidebar is intentionally a dark slab in both themes — it anchors the
+       app and keeps the reading surface visually dominant. */
+    --sidebar-background: 200 46% 9%;
+    --sidebar-foreground: 190 24% 92%;
+    --sidebar-primary: 27 88% 58%;
+    --sidebar-primary-foreground: 24 45% 12%;
+    --sidebar-accent: 200 38% 16%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 200 32% 18%;
+    --sidebar-ring: 178 55% 48%;
+  }
+
+  .dark {
+    --background: 200 44% 7%;
+    --foreground: 190 22% 94%;
+
+    --card: 200 38% 10%;
+    --card-foreground: 190 22% 94%;
+    --elevated: 200 34% 13%;
+
+    --popover: 200 38% 11%;
+    --popover-foreground: 190 22% 94%;
+
+    --primary: 178 58% 50%;
+    --primary-foreground: 200 47% 7%;
+
+    --secondary: 27 90% 60%;
+    --secondary-foreground: 24 45% 10%;
+
+    --muted: 200 28% 15%;
+    --muted-foreground: 195 14% 66%;
+
+    --accent: 200 32% 18%;
+    --accent-foreground: 178 55% 82%;
+
+    --destructive: 4 70% 54%;
+    --destructive-foreground: 0 0% 99%;
+
+    --success: 158 58% 46%;
+    --success-foreground: 200 47% 7%;
+
+    --border: 200 26% 19%;
+    --input: 200 26% 22%;
+    --ring: 178 58% 50%;
+
+    --sidebar-background: 200 48% 5%;
+    --sidebar-foreground: 190 22% 90%;
+    --sidebar-primary: 27 90% 60%;
+    --sidebar-primary-foreground: 24 45% 10%;
+    --sidebar-accent: 200 36% 13%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 200 30% 15%;
+    --sidebar-ring: 178 58% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'ss01';
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Headings carry the display face; body copy stays on Inter. */
+  h1, h2, h3 {
+    @apply tracking-tight;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* A single, visible focus treatment. Several hand-rolled controls in this app
+     previously set `focus:outline-none` with nothing in its place, leaving
+     keyboard users with no indication of where they were. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  ::selection {
+    @apply bg-primary/20;
+  }
+
+  /* Scrollbars that don't fight the dark theme. */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full border-4 border-solid border-transparent bg-border bg-clip-content;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40 bg-clip-content;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+  }
+
+  .font-data {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Small uppercase label used for eyebrows and metadata. */
+  .data-chip {
+    @apply font-data text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent;
+  }
+
+  .glass-card {
+    @apply border border-border/60 bg-card/70 backdrop-blur-xl;
+  }
+
+  /* ------------------------------------------------------------------------
+     Signature element: the viewfinder reticle.
+     Corner marks in the AI-signal amber, wrapped around any medical image so a
+     scan always reads as a scan and never as decorative photography.
+     ------------------------------------------------------------------------ */
+  .scan-frame {
+    position: relative;
+    border-radius: var(--radius);
+  }
+  .scan-frame::before,
+  .scan-frame::after,
+  .scan-frame > .scan-corner-tl {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+  }
+  .scan-frame::before {
+    top: 6px;
+    left: 6px;
+    border-top: 2px solid hsl(var(--secondary));
+    border-left: 2px solid hsl(var(--secondary));
+    border-top-left-radius: 5px;
+  }
+  .scan-frame::after {
+    right: 6px;
+    bottom: 6px;
+    border-right: 2px solid hsl(var(--secondary));
+    border-bottom: 2px solid hsl(var(--secondary));
+    border-bottom-right-radius: 5px;
+  }
+  .scan-frame > .scan-corner-tl {
+    top: 6px;
+    right: 6px;
+    border-top: 2px solid hsl(var(--secondary) / 0.5);
+    border-right: 2px solid hsl(var(--secondary) / 0.5);
+    border-top-right-radius: 5px;
+  }
+
+  /* The analysis sweep. Used only while inference is actually running. */
+  .scan-sweep {
+    position: relative;
+    overflow: hidden;
+  }
+  .scan-sweep::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    z-index: 3;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--secondary) / 0.95),
+      transparent
+    );
+    box-shadow: 0 0 14px 1px hsl(var(--secondary) / 0.55);
+    animation: scan-sweep-move 2.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  /* Subtle grid backdrop for hero sections. */
+  .grid-backdrop {
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.5) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.5) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  }
+}
+
+@keyframes scan-sweep-move {
+  0% { top: 0; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Honour the OS setting. Several pages here animate on mount; for anyone who
+   has asked for reduced motion those should simply not move. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  nav,
+  aside,
+  header,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
